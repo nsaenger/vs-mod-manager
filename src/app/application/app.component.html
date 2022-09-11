@@ -1,0 +1,20 @@
+<div class="wrapper">
+  <header-bar></header-bar>
+
+  <div class="version-select">
+    <mat-form-field>
+      <mat-select disableOptionCentering (valueChange)="modService.gameVersion.next($event)"
+                  placeholder="Game version"
+                  [(ngModel)]="selectedGameVersion">
+        <mat-option *ngFor="let version of gameVersions" [value]="version">{{version.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    &nbsp;
+    <a mat-raised-button color="primary" (click)="openFileChooser()">Auto detect</a>
+    <input #fileInput type="file" style="display: none" (change)="getFileVersion($event)">
+  </div>
+
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

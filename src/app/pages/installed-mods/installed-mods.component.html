@@ -1,0 +1,5 @@
+<div class="container">
+  <div *ngIf="installedMods.length > 0">
+    <mod-viewer *ngFor="let installedMod of installedMods" [modInfo]="installedMod"></mod-viewer>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="wrapper">
+  <div class="overview">
+    <div class="logo" *ngIf="!details?.logofilename"
+         [style.background-image]="'url(https://mods.vintagestory.at/web/img/mod-default.png)'"></div>
+    <div class="logo" *ngIf="!!details?.logofilename"
+         [style.background-image]="'url('+ MOD_API.FILE_BASE + details.logofilename +')'"></div>
+    <div class="summary">
+      <div class="title">
+        <h2>{{modInfo.name}} <small>v{{modInfo.version}}</small> <small
+          *ngIf="!!compatibleRelease && compatibleRelease.modversion !== modInfo.version"> Update to
+          v{{compatibleRelease.modversion}}</small>
+        </h2>
+
+        <a mat-icon-button color="warn" (click)="remove(installedRelease.filename)">
+          <mat-icon>delete</mat-icon>
+        </a>
+      </div>
+      <p *ngIf="installedRelease">
+        <mat-chip-list>
+          <ng-container *ngFor="let tag of installedRelease.tags">
+            <mat-chip *ngIf="isInstalledCompatible(tag)" color="accent" selected>{{tag}}</mat-chip>
+            <mat-chip *ngIf="!isInstalledCompatible(tag)">{{tag}}</mat-chip>
+          </ng-container>
+        </mat-chip-list>
+      </p>
+      <p>{{modInfo.description}}</p>
+    </div>
+  </div>
+  <div class="details">
+    <mat-accordion *ngIf="details">
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Details</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-tab-group>
+          <mat-tab label="Description">
+            <div [innerHTML]="details.text"></div>
+          </mat-tab>
+
+          <mat-tab label="Versions">
+            <table mat-table [dataSource]="details.releases" style="width: 100%">
+
+              <ng-container matColumnDef="releaseid">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.releaseid}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="modversion">
+                <th mat-header-cell *matHeaderCellDef> Version </th>
+                <td mat-cell *matCellDef="let element"> {{element.modversion}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="tags">
+                <th mat-header-cell *matHeaderCellDef> Compatible versions </th>
+                <td mat-cell *matCellDef="let element">
+                  <ng-container *ngFor="let tag of element.tags">
+                    <a mat-raised-button *ngIf="isVersionCompatible(tag)" color="accent" >{{tag}}&nbsp;</a>
+                    <a mat-button *ngIf="!isVersionCompatible(tag)" >{{tag}}&nbsp;</a>
+                  </ng-container>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="downloads">
+                <th mat-header-cell *matHeaderCellDef> Downloads </th>
+                <td mat-cell *matCellDef="let element"> {{element.downloads}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="created">
+                <th mat-header-cell *matHeaderCellDef> Created </th>
+                <td mat-cell *matCellDef="let element"> {{element.created}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="installed">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-chip *ngIf="modInfo.version === element.modversion" color="accent" selected>installed</mat-chip>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="download">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <a mat-icon-button *ngIf="modInfo.version !== element.modversion" (click)="download(element)">
+                    <mat-icon>download</mat-icon>
+                  </a>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

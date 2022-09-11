@@ -1,0 +1,41 @@
+$background: #434343;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid darken($background, 20%);
+  border-radius: 5px;
+  background-color: $background;
+  margin: 10px 20px;
+}
+
+.overview {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.summary {
+  flex: 1;
+}
+
+.title {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.mat-expansion-panel-header-title {
+  display: inline-block;
+  text-align: center;
+}
+
+.logo {
+  height: 200px;
+  width: 200px;
+  margin: 20px;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+}

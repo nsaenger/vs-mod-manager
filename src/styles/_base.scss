@@ -1,0 +1,42 @@
+$background: #353535;
+
+html, body {
+  margin: 0;
+  padding: 0;
+
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+
+  background-color: $background;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: lightblue;
+
+  &:hover {
+    color: darken(lightblue, 15%);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;               /* width of the entire scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: $background;        /* color of the tracking area */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darken(lightblue, 15%);    /* color of the scroll thumb */
+  border-radius: 5px;       /* roundness of the scroll thumb */
+  border: 0;  /* creates padding around scroll thumb */
+}
+
+.pull-right {
+  float: right;
+}
