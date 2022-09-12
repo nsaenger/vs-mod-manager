@@ -8,20 +8,47 @@ on:
     branches:
       - main
 
-jobs:    
+jobs:
   version:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: EndBug/add-and-commit@v9
-      with:
-        author_name: github
-        author_email: actions@github.com
-    - name: Use Node.js 16.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16.x
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run version
-    - run: git push origin --follow-tags
+      - uses: actions/checkout@v3
+      - uses: EndBug/add-and-commit@v9
+        with:
+          author_name: github
+          author_email: actions@github.com
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'npm'
+
+
+      - name: Build project
+        run: |
+          npm ci
+          cd app/ && npm ci && cd ..
+          npm run build:prod
+
+      - name: Version
+        if: !startsWith(github.event.head_commit.message, 'chore')
+        run: |
+          git tag | xargs git tag -d
+          npm run version
+          git push origin --tags
+
+      - name: Package
+        if: startsWith(github.event.head_commit.message, 'chore')
+        run: |
+          npm run electron:build
+
+      - name: Release
+        if: startsWith(github.event.head_commit.message, 'chore')
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            LICENSE.md
+            CHANGELOG.md
+            release/*
